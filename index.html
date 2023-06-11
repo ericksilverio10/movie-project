@@ -1,23 +1,22 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Filmes</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <meta charset="UTF-8">
+  <title>Exemplo de Leitura de JSON</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
+<body>
 <style>
-    i{
-        margin: .5rem;
+    #container {
+        background-color: rgb(235, 235, 235);
+        margin: 2rem;
+        box-shadow: 0px 10px 15px -3px rgba(0,0,0,0.4);
     }
-    .card {
-        background-color: white;
-        box-shadow: 0px 10px 15px -3px rgba(0,0,0,0.1);
-        margin-top: 50px;
-        border: none;
+    i {
+        margin: .5rem;
     }
     .btn{
         border: none;
@@ -32,14 +31,40 @@
         color: white;
     }
 </style>
-<body>
-    <div class="card d-flex align-items-center justify-content-center flex-column text-center">
-        <h1><i class="fas fa-film fs-2"></i>Filmes</h1>
-        <div class="card-body d-flex flex-column">
-            <a class="btn m-2" target="_blank" href="https://drive.google.com/file/d/1UkgrI-fM6rOAHmFEaABtJQP_Lx6jantD/view?fbclid=IwAR3c0zVYnzIr4rA8jjnrs8PH2Fb-qmjBXrila3rv-B9byz1zJ5bZho5J62M">Norbit<i class="fas fa-share"></i></a>
-            <a class="btn m-2" target="_blank" href="https://drive.google.com/file/d/1UvzS8IVRuT_uHRoYysFm3pVXRzSOkh92/view">O Pequenino<i class="fas fa-share"></i></a>
-            <a class="btn m-2" target="_blank" href="https://drive.google.com/file/d/1UvzS8IVRuT_uHRoYysFm3pVXRzSOkh92/view">O Pequenino<i class="fas fa-share"></i></a>
-    </div>
 
+  <div class="d-flex flex-column text-center justify-content-center" id="container">
+    <h1><i class="fas fa-film fs-2"></i>Filmes</h1>
+  </div>
+
+  <script>
+    $(document).ready(function() {
+      // Faz uma requisição AJAX para carregar o arquivo JSON
+      $.getJSON('movies.json', function(data) {
+        // Itera sobre os elementos do JSON
+        $.each(data, function(index, item) {
+          // Cria uma nova tag <a> com base no elemento do JSON
+          var newLink = $('<a>', {
+            class: 'btn m-2',
+            target: '_blank',
+            href: item.url
+          });
+
+          // Define o texto do <a> como o valor da propriedade "movie_name"
+          newLink.text(item.movie_name);
+
+          // Cria um novo <i> dentro do <a> com a classe 'fas fa-share'
+          var newIcon = $('<i>', {
+            class: 'fas fa-share'
+          });
+
+          // Adiciona o <i> dentro do <a>
+          newLink.append(newIcon);
+
+          // Adiciona o novo <a> no contêiner
+          $('#container').append(newLink);
+        });
+      });
+    });
+  </script>
 </body>
 </html>
