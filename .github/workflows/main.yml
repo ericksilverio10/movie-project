@@ -1,0 +1,30 @@
+name: Create Release Branch on PR to Develop
+
+on:
+  pull_request:
+    types: [opened]
+    branches:
+      - develop
+
+jobs:
+  create-release-branch:
+    if: startsWith(github.head_ref, 'feature/')
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up GitHub CLI
+        uses: actions/setup-gh@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create Release Branch
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          RELEASE_BRANCH="release/$(date +'%d-%m-%Y')"
+          gh api -X POST /repos/${{ github.repository }}/git/refs \
+            -f ref="refs/heads/$RELEASE_BRANCH" \
+            -f sha="${{ github.event.pull_request.head.sha }}"
