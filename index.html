@@ -1,70 +1,66 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Exemplo de Leitura de JSON</title>
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <title>Críticas de Filmes</title>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+
+  <!-- Fonte Google bonita -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+ 
+  
+  <!-- Font Awesome CDN sem integrity -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+  <!-- Link para o CSS separado -->
+  <link rel="stylesheet" href="./styles.css">
+
 </head>
 <body>
-<style>
-    #container {
-        background-color: rgb(235, 235, 235);
-        margin: 2rem;
-        box-shadow: 0px 10px 15px -3px rgba(0,0,0,0.4);
-    }
-    i {
-        margin: .5rem;
-    }
-    .btn{
-        border: none;
-        color: white;
-        box-shadow: 0px 10px 15px -3px rgba(0,0,0,0.4);
-        background-color: #EB5160;
-        padding: 1rem 5rem;
-        font-size: 1.5rem;
-        border-radius: 30px 30px 0 30px;
-    }
-    .btn:hover{
-        color: white;
-    }
-</style>
+  <div id="app">
+    <h2><i class="fa-solid fa-film"></i> Cine Gabis & Erick</h2>
+    <div class="summary">
+      <p>Total de filmes assistidos: 
+        <strong style="font-size: 2rem;">{{ animatedCount }}</strong>
+      </p>
+      <p><i class="fa-solid fa-thumbs-up fa-bounce" style="color:green"></i> Melhor filme avaliado: 
+        <strong v-if="bestMovie">
+          {{ bestMovie.movieName }} (Média: {{ getAverage(bestMovie) }} ⭐)
+        </strong>
+        <span v-else>---</span>
+      </p>
+      <p><i class="fa-solid fa-thumbs-down fa-bounce" style="color:red"></i> Pior filme avaliado: 
+        <strong v-if="worstMovie">
+          {{ worstMovie.movieName }} (Média: {{ getAverage(worstMovie) }} ⭐)
+        </strong>
+        <span v-else>---</span>
+      </p>
+    </div>
 
-  <div class="d-flex flex-column text-center justify-content-center" id="container">
-    <h1><i class="fas fa-film fs-2"></i>Filmes</h1>
+    <div class="sort-buttons" style="text-align:center; margin-bottom:20px;">
+      <button @click="toggleSortOrder">
+        <i :class="sortOrder === 'desc' ? 'fa-solid fa-arrow-up-wide-short' : 'fa-solid fa-arrow-down-wide-short'"></i> {{ sortOrder === 'desc' ? 'Melhor ao Pior' : 'Pior ao Melhor' }}
+      </button>
+    </div>
+
+    <ul class="movies-grid">
+      <li v-for="movie in movies" :key="movie.movieName" class="movie-card">
+        <img :src="movie.movieImg">
+        <div class="movie-info">
+          <span class="movie-title">{{ movie.movieName }}</span>
+          <span class="movie-date">📅 {{ formatDate(movie.date) || 'Sem data' }}</span>
+          <span class="ratings">
+            Erick <span class="erick" v-html="getRatingIcon(movie.erickRating)"></span> <br /> 
+            Gabi <span class="gabi" v-html="getRatingIcon(movie.gabiRating)"></span>
+          </span>
+        </div>
+      </li>
+    </ul>
+
+    <button @click="loadMovies">🔄 Recarregar Lista</button>
   </div>
 
-  <script>
-    $(document).ready(function() {
-      // Faz uma requisição AJAX para carregar o arquivo JSON
-      $.getJSON('movies.json', function(data) {
-        // Itera sobre os elementos do JSON
-        $.each(data, function(index, item) {
-          // Cria uma nova tag <a> com base no elemento do JSON
-          var newLink = $('<a>', {
-            class: 'btn m-2',
-            target: '_blank',
-            href: item.url
-          });
-
-          // Define o texto do <a> como o valor da propriedade "movie_name"
-          newLink.text(item.movie_name);
-
-          // Cria um novo <i> dentro do <a> com a classe 'fas fa-share'
-          var newIcon = $('<i>', {
-            class: 'fas fa-share'
-          });
-
-          // Adiciona o <i> dentro do <a>
-          newLink.append(newIcon);
-
-          // Adiciona o novo <a> no contêiner
-          $('#container').append(newLink);
-        });
-      });
-    });
-  </script>
+  <script src="app.js"></script>
 </body>
 </html>
