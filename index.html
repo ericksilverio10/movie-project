@@ -2,63 +2,447 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Críticas de Filmes</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cine Gabis & Erick - Críticas de Filmes</title>
+  
+  <!-- Vue.js -->
   <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
 
-  <!-- Fonte Google bonita -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-
- 
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
   
-  <!-- Font Awesome CDN sem integrity -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
-  <!-- Link para o CSS separado -->
-  <link rel="stylesheet" href="./styles.css">
+  <!-- Fonte Google -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      font-family: 'Poppins', sans-serif;
+    }
+    
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    @keyframes fadeInDown {
+      from {
+        opacity: 0;
+        transform: translateY(-30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    @keyframes scaleIn {
+      from {
+        opacity: 0;
+        transform: scale(0.9);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+    
+    @keyframes pulse {
+      0%, 100% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.05);
+      }
+    }
+    
+    .animate-fadeInUp {
+      animation: fadeInUp 0.6s ease-out;
+    }
+    
+    .animate-fadeInDown {
+      animation: fadeInDown 0.8s ease-out;
+    }
+    
+    .animate-scaleIn {
+      animation: scaleIn 0.5s ease-out;
+    }
+    
+    .animate-pulse-slow {
+      animation: pulse 2s ease-in-out infinite;
+    }
+    
+    .movie-card {
+      transition: all 0.3s ease;
+    }
+    
+    .movie-card:hover {
+      transform: translateY(-8px);
+    }
+    
+    .star-rating {
+      display: inline-flex;
+      gap: 2px;
+    }
+    
+    .preview-image {
+      transition: all 0.3s ease;
+    }
+    
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    
+    ::-webkit-scrollbar-track {
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 10px;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+      background: rgba(139, 92, 246, 0.5);
+      border-radius: 10px;
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(139, 92, 246, 0.8);
+    }
+  </style>
 
 </head>
-<body>
-  <div id="app">
-    <h1><i class="fa-solid fa-film"></i> Cine Gabis & Erick</h1>
-    <div class="summary">
-      <p>Total de filmes assistidos: 
-        <strong style="font-size: 2.6rem;">{{ animatedCount }}</strong>
-      </p>
-      <p><i class="fa-solid fa-thumbs-up fa-bounce" style="color:green"></i> Melhor filme avaliado: 
-        <strong v-if="bestMovie">
-          {{ bestMovie.movieName }} (Média: {{ getAverage(bestMovie) }} ⭐)
-        </strong>
-        <span v-else>---</span>
-      </p>
-      <p><i class="fa-solid fa-thumbs-down fa-bounce" style="color:red"></i> Pior filme avaliado: 
-        <strong v-if="worstMovie">
-          {{ worstMovie.movieName }} (Média: {{ getAverage(worstMovie) }} ⭐)
-        </strong>
-        <span v-else>---</span>
-      </p>
+<body class="bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900 min-h-screen">
+  <div id="app" class="min-h-screen py-8 px-4">
+    <!-- Header -->
+    <header class="text-center mb-12 animate-fadeInDown">
+      <h1 class="text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-red-500 to-pink-500 mb-2">
+        <i class="fa-solid fa-film"></i> Cine Gabis & Erick
+      </h1>
+      <p class="text-gray-300 text-lg">Nossas aventuras cinematográficas</p>
+    </header>
+
+    <!-- Stats Cards -->
+    <div class="max-w-7xl mx-auto mb-12 animate-fadeInUp">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- Total de Filmes -->
+        <div class="bg-gradient-to-br from-purple-600 to-blue-600 rounded-2xl p-6 shadow-2xl transform hover:scale-105 transition-all duration-300">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-purple-200 text-sm font-medium mb-1">Total de Filmes</p>
+              <p class="text-white text-5xl font-bold">{{ animatedCount }}</p>
+            </div>
+            <div class="bg-white bg-opacity-20 rounded-full p-4">
+              <i class="fa-solid fa-film text-white text-3xl"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- Melhor Filme -->
+        <div class="bg-gradient-to-br from-green-600 to-emerald-600 rounded-2xl p-6 shadow-2xl transform hover:scale-105 transition-all duration-300">
+          <div class="flex items-center gap-3 mb-2">
+            <i class="fa-solid fa-trophy text-yellow-300 text-2xl"></i>
+            <p class="text-green-100 text-sm font-medium">Melhor Filme</p>
+          </div>
+          <div v-if="bestMovie">
+            <p class="text-white font-bold text-lg mb-1">{{ bestMovie.movieName }}</p>
+            <div class="flex items-center gap-2">
+              <span class="text-yellow-300 text-xl" v-html="getStars(getAverage(bestMovie))"></span>
+              <span class="text-green-100 text-sm">({{ getAverage(bestMovie).toFixed(1) }})</span>
+            </div>
+          </div>
+          <p v-else class="text-white">---</p>
+        </div>
+
+        <!-- Pior Filme -->
+        <div class="bg-gradient-to-br from-red-600 to-pink-600 rounded-2xl p-6 shadow-2xl transform hover:scale-105 transition-all duration-300">
+          <div class="flex items-center gap-3 mb-2">
+            <i class="fa-solid fa-face-sad-tear text-blue-200 text-2xl"></i>
+            <p class="text-red-100 text-sm font-medium">Pior Filme</p>
+          </div>
+          <div v-if="worstMovie">
+            <p class="text-white font-bold text-lg mb-1">{{ worstMovie.movieName }}</p>
+            <div class="flex items-center gap-2">
+              <span class="text-yellow-300 text-xl" v-html="getStars(getAverage(worstMovie))"></span>
+              <span class="text-red-100 text-sm">({{ getAverage(worstMovie).toFixed(1) }})</span>
+            </div>
+          </div>
+          <p v-else class="text-white">---</p>
+        </div>
+      </div>
     </div>
 
-    <div class="sort-buttons" style="text-align:center; margin-bottom:20px;">
-      <button @click="toggleSortOrder">
-        <i :class="sortOrder === 'desc' ? 'fa-solid fa-arrow-up-wide-short' : 'fa-solid fa-arrow-down-wide-short'"></i> {{ sortOrder === 'desc' ? 'Melhor ao Pior' : 'Pior ao Melhor' }}
+    <!-- Action Buttons -->
+    <div class="max-w-7xl mx-auto mb-8 flex flex-wrap justify-center gap-4 animate-scaleIn">
+      <button 
+        @click="toggleSortOrder"
+        class="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-semibold px-6 py-3 rounded-xl shadow-lg transform hover:scale-105 transition-all duration-300 flex items-center gap-2">
+        <i :class="sortOrder === 'desc' ? 'fa-solid fa-arrow-down-wide-short' : 'fa-solid fa-arrow-up-wide-short'"></i>
+        {{ sortOrder === 'desc' ? 'Melhor → Pior' : 'Pior → Melhor' }}
+      </button>
+      
+      <button 
+        @click="toggleAddForm"
+        :class="showAddForm ? 'bg-gradient-to-r from-gray-600 to-gray-700' : 'bg-gradient-to-r from-pink-600 to-red-600'"
+        class="hover:shadow-xl text-white font-semibold px-6 py-3 rounded-xl shadow-lg transform hover:scale-105 transition-all duration-300 flex items-center gap-2">
+        <i :class="showAddForm ? 'fa-solid fa-times' : 'fa-solid fa-plus'"></i>
+        {{ showAddForm ? 'Cancelar' : 'Adicionar Filme' }}
+      </button>
+      
+      <button 
+        @click="loadMovies" 
+        :disabled="loading"
+        class="bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-semibold px-6 py-3 rounded-xl shadow-lg transform hover:scale-105 transition-all duration-300 flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none">
+        <i class="fa-solid fa-rotate" :class="loading ? 'fa-spin' : ''"></i>
+        {{ loading ? 'Carregando...' : 'Recarregar' }}
       </button>
     </div>
 
-    <ul class="movies-grid">
-      <li v-for="movie in movies" :key="movie.movieName" class="movie-card">
-        <img :src="movie.movieImg">
-        <div class="movie-info">
-          <span class="movie-title">{{ movie.movieName }}</span>
-          <span class="movie-date">📅 {{ formatDate(movie.date) || 'Sem data' }}</span>
-          <span class="ratings">
-            Erick <span class="erick" v-html="getRatingIcon(movie.erickRating)"></span> <br /> 
-            Gabi <span class="gabi" v-html="getRatingIcon(movie.gabiRating)"></span>
-          </span>
-        </div>
-      </li>
-    </ul>
+    <!-- Message Alert -->
+    <div v-if="message" class="max-w-7xl mx-auto mb-6 animate-scaleIn">
+      <div 
+        :class="message.includes('✅') ? 'bg-green-500 border-green-700' : 'bg-red-500 border-red-700'"
+        class="border-l-4 text-white px-6 py-4 rounded-lg shadow-lg flex items-center gap-3">
+        <i :class="message.includes('✅') ? 'fa-solid fa-check-circle' : 'fa-solid fa-exclamation-circle'" class="text-2xl"></i>
+        <p class="font-semibold">{{ message }}</p>
+      </div>
+    </div>
 
-    <button @click="loadMovies">🔄 Recarregar Lista</button>
+    <!-- Add Movie Form -->
+    <div v-if="showAddForm" class="max-w-4xl mx-auto mb-12 animate-scaleIn">
+      <div class="bg-gray-800 bg-opacity-50 backdrop-blur-lg rounded-2xl shadow-2xl p-8 border border-gray-700">
+        <h2 class="text-3xl font-bold text-white mb-6 flex items-center gap-3">
+          <i class="fa-solid fa-plus-circle text-pink-500"></i>
+          Adicionar Novo Filme
+        </h2>
+        
+        <form @submit.prevent="addMovie" class="space-y-6">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Nome do Filme com Busca -->
+            <div class="md:col-span-2 relative">
+              <label class="block text-gray-300 font-semibold mb-2">
+                <i class="fa-solid fa-film text-purple-400"></i> Nome do Filme
+              </label>
+              <div class="relative">
+                <input 
+                  type="text" 
+                  v-model="newMovie.movieName" 
+                  @input="searchMovies(newMovie.movieName)"
+                  @focus="newMovie.movieName && searchMovies(newMovie.movieName)"
+                  required
+                  class="w-full bg-gray-700 text-white border border-gray-600 rounded-lg px-4 py-3 pr-10 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+                  placeholder="Digite o nome do filme...">
+                <i v-if="searchLoading" class="fa-solid fa-spinner fa-spin absolute right-3 top-1/2 transform -translate-y-1/2 text-purple-400"></i>
+                <i v-else class="fa-solid fa-search absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+              </div>
+              
+              <!-- Dropdown de Resultados -->
+              <div 
+                v-if="showSearchResults && searchResults.length > 0" 
+                class="absolute z-50 w-full mt-2 bg-gray-800 border border-gray-600 rounded-lg shadow-2xl max-h-96 overflow-y-auto animate-scaleIn">
+                <div 
+                  v-for="movie in searchResults" 
+                  :key="movie.id"
+                  @click="selectMovie(movie)"
+                  class="flex items-center gap-3 p-3 hover:bg-gray-700 cursor-pointer transition-colors border-b border-gray-700 last:border-b-0">
+                  <img 
+                    v-if="movie.poster_path"
+                    :src="`https://image.tmdb.org/t/p/w92${movie.poster_path}`" 
+                    :alt="movie.title"
+                    class="w-12 h-18 object-cover rounded">
+                  <div v-else class="w-12 h-18 bg-gray-700 rounded flex items-center justify-center">
+                    <i class="fa-solid fa-image text-gray-500"></i>
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <p class="text-white font-semibold truncate">{{ movie.title }}</p>
+                    <div class="flex items-center gap-2 text-sm text-gray-400">
+                      <span v-if="movie.release_date">{{ movie.release_date.substring(0, 4) }}</span>
+                      <span v-if="movie.vote_average" class="flex items-center gap-1">
+                        <i class="fa-solid fa-star text-yellow-400 text-xs"></i>
+                        {{ movie.vote_average.toFixed(1) }}
+                      </span>
+                    </div>
+                  </div>
+                  <i class="fa-solid fa-chevron-right text-gray-500"></i>
+                </div>
+              </div>
+              
+              <!-- Mensagem quando não há resultados -->
+              <div 
+                v-if="showSearchResults && searchResults.length === 0 && !searchLoading && newMovie.movieName.length >= 2"
+                class="absolute z-50 w-full mt-2 bg-gray-800 border border-gray-600 rounded-lg shadow-2xl p-4 text-center">
+                <i class="fa-solid fa-search text-gray-500 text-2xl mb-2"></i>
+                <p class="text-gray-400">Nenhum filme encontrado</p>
+                <p class="text-gray-500 text-sm mt-1">Tente outro nome</p>
+              </div>
+            </div>
+
+            <!-- URL da Imagem -->
+            <div class="md:col-span-2">
+              <label class="block text-gray-300 font-semibold mb-2">
+                <i class="fa-solid fa-image text-blue-400"></i> URL da Imagem
+                <span class="text-xs text-gray-500 font-normal ml-2">(Preenchido automaticamente ao selecionar da busca)</span>
+              </label>
+              <input 
+                type="url" 
+                v-model="newMovie.movieImg" 
+                @input="previewImage"
+                required
+                class="w-full bg-gray-700 text-white border border-gray-600 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                placeholder="https://... (ou selecione um filme da busca)">
+              
+              <!-- Image Preview -->
+              <div v-if="newMovie.movieImg" class="mt-4 flex justify-center">
+                <img 
+                  :src="newMovie.movieImg" 
+                  @error="imageError = true"
+                  @load="imageError = false"
+                  v-show="!imageError"
+                  class="preview-image rounded-lg shadow-lg max-h-64 object-cover border-4 border-purple-500"
+                  alt="Preview">
+                <div v-show="imageError" class="bg-gray-700 rounded-lg p-8 text-center">
+                  <i class="fa-solid fa-image-slash text-gray-500 text-4xl mb-2"></i>
+                  <p class="text-gray-400">Imagem inválida</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Data -->
+            <div>
+              <label class="block text-gray-300 font-semibold mb-2">
+                <i class="fa-solid fa-calendar text-green-400"></i> Data
+              </label>
+              <input 
+                type="date" 
+                v-model="newMovie.date" 
+                required
+                class="w-full bg-gray-700 text-white border border-gray-600 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all">
+            </div>
+
+            <!-- Nota Erick -->
+            <div>
+              <label class="block text-gray-300 font-semibold mb-2">
+                <i class="fa-solid fa-star text-yellow-400"></i> Nota Erick (0-10)
+              </label>
+              <input 
+                type="number" 
+                v-model="newMovie.erickRating" 
+                min="0" 
+                max="10" 
+                step="0.5" 
+                required
+                class="w-full bg-gray-700 text-white border border-gray-600 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition-all">
+              <div class="mt-2 text-yellow-400 text-2xl" v-html="getStars(newMovie.erickRating)"></div>
+            </div>
+
+            <!-- Nota Gabi -->
+            <div>
+              <label class="block text-gray-300 font-semibold mb-2">
+                <i class="fa-solid fa-star text-pink-400"></i> Nota Gabi (0-10)
+              </label>
+              <input 
+                type="number" 
+                v-model="newMovie.gabiRating" 
+                min="0" 
+                max="10" 
+                step="0.5" 
+                required
+                class="w-full bg-gray-700 text-white border border-gray-600 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all">
+              <div class="mt-2 text-pink-400 text-2xl" v-html="getStars(newMovie.gabiRating)"></div>
+            </div>
+          </div>
+
+          <!-- Submit Button -->
+          <button 
+            type="submit" 
+            :disabled="loading"
+            class="w-full bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-700 hover:to-purple-700 text-white font-bold py-4 rounded-xl shadow-lg transform hover:scale-105 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-3">
+            <i class="fa-solid fa-save text-xl"></i>
+            <span class="text-lg">{{ loading ? 'Salvando...' : 'Salvar Filme' }}</span>
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Movies Grid -->
+    <div class="max-w-7xl mx-auto">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div 
+          v-for="(movie, index) in movies" 
+          :key="movie.id || movie.movieName" 
+          class="movie-card bg-gray-800 bg-opacity-50 backdrop-blur-sm rounded-2xl overflow-hidden shadow-xl border border-gray-700 hover:border-purple-500 hover:shadow-2xl hover:shadow-purple-500/50 animate-fadeInUp"
+          :style="{ animationDelay: `${index * 0.05}s` }">
+          
+          <!-- Movie Poster -->
+          <div class="relative overflow-hidden aspect-[2/3]">
+            <img 
+              :src="movie.movieImg" 
+              :alt="movie.movieName"
+              class="w-full h-full object-cover">
+            <div class="absolute top-3 right-3 bg-black bg-opacity-70 backdrop-blur-sm rounded-full px-3 py-1 flex items-center gap-1">
+              <span class="text-yellow-400 font-bold text-sm">{{ getAverage(movie).toFixed(1) }}</span>
+              <i class="fa-solid fa-star text-yellow-400 text-xs"></i>
+            </div>
+          </div>
+
+          <!-- Movie Info -->
+          <div class="p-5">
+            <h3 class="text-white font-bold text-lg mb-2 line-clamp-2 hover:text-purple-400 transition-colors">
+              {{ movie.movieName }}
+            </h3>
+            
+            <div class="flex items-center gap-2 text-gray-400 text-sm mb-4">
+              <i class="fa-solid fa-calendar"></i>
+              <span>{{ formatDate(movie.date) || 'Sem data' }}</span>
+            </div>
+
+            <!-- Ratings -->
+            <div class="space-y-2">
+              <div class="flex items-center justify-between bg-gray-700 bg-opacity-50 rounded-lg p-2">
+                <span class="text-blue-300 font-semibold text-sm">Erick</span>
+                <div class="flex items-center gap-2">
+                  <span class="text-yellow-400 text-lg" v-html="getStars(movie.erickRating)"></span>
+                  <span class="text-white font-bold text-sm">{{ movie.erickRating.toFixed(1) }}</span>
+                </div>
+              </div>
+              
+              <div class="flex items-center justify-between bg-gray-700 bg-opacity-50 rounded-lg p-2">
+                <span class="text-pink-300 font-semibold text-sm">Gabi</span>
+                <div class="flex items-center gap-2">
+                  <span class="text-yellow-400 text-lg" v-html="getStars(movie.gabiRating)"></span>
+                  <span class="text-white font-bold text-sm">{{ movie.gabiRating.toFixed(1) }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Empty State -->
+      <div v-if="!loading && movies.length === 0" class="text-center py-20">
+        <i class="fa-solid fa-film text-gray-600 text-6xl mb-4"></i>
+        <p class="text-gray-400 text-xl">Nenhum filme encontrado</p>
+      </div>
+
+      <!-- Loading State -->
+      <div v-if="loading && movies.length === 0" class="text-center py-20">
+        <i class="fa-solid fa-spinner fa-spin text-purple-500 text-6xl mb-4"></i>
+        <p class="text-gray-400 text-xl">Carregando filmes...</p>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="max-w-7xl mx-auto mt-16 text-center text-gray-400 pb-8">
+      <p class="text-sm">
+        <i class="fa-solid fa-heart text-red-500"></i> Feito com amor por Gabis & Erick
+      </p>
+    </footer>
   </div>
 
   <script src="app.js"></script>
