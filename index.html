@@ -22,6 +22,20 @@
       font-family: 'Poppins', sans-serif;
     }
     
+    html {
+      background-color: #111827;
+      min-height: 100vh;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      background-color: #111827;
+      min-height: 100vh;
+      margin: 0;
+      padding: 0;
+    }
+    
     @keyframes fadeInUp {
       from {
         opacity: 0;
@@ -108,21 +122,265 @@
     }
     
     ::-webkit-scrollbar-thumb {
-      background: rgba(139, 92, 246, 0.5);
+      background: var(--scrollbar-color);
       border-radius: 10px;
+      transition: background 0.5s ease;
     }
     
     ::-webkit-scrollbar-thumb:hover {
-      background: rgba(139, 92, 246, 0.8);
+      background: var(--scrollbar-hover);
+      transition: background 0.3s ease;
+    }
+    
+    /* Transições suaves para mudanças de tema */
+    .theme-transition {
+      transition: background-color 0.6s ease, border-color 0.6s ease, box-shadow 0.6s ease, color 0.6s ease;
+    }
+    
+    .theme-transition-fast {
+      transition: background-color 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease, color 0.4s ease;
+    }
+    
+    /* Transição para o body */
+    html {
+      background-color: #111827;
+      min-height: 100vh;
+    }
+    
+    body {
+      background-color: #111827;
+      transition: background-image 0.8s ease;
+      min-height: 100vh;
+      margin: 0;
+      padding: 0;
+    }
+    
+    /* Classes dinâmicas para botões com tema */
+    .btn-theme-secondary {
+      transition: all 0.4s ease;
+    }
+    
+    .btn-theme-secondary:hover {
+      transform: scale(1.05);
+    }
+    
+    .btn-theme-primary {
+      transition: all 0.4s ease;
+    }
+    
+    .btn-theme-primary:hover {
+      transform: scale(1.05);
+    }
+    
+    /* Animações para Retrospectiva Spotify-style */
+    @keyframes fadeInScale {
+      from {
+        opacity: 0;
+        transform: scale(0.8) translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
+    
+    @keyframes slideInFromLeft {
+      from {
+        opacity: 0;
+        transform: translateX(-50px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+    
+    @keyframes slideInFromRight {
+      from {
+        opacity: 0;
+        transform: translateX(50px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+    
+    @keyframes glow {
+      0%, 100% {
+        box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+      }
+      50% {
+        box-shadow: 0 0 30px rgba(59, 130, 246, 0.8), 0 0 40px rgba(59, 130, 246, 0.4);
+      }
+    }
+    
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(0px);
+      }
+      50% {
+        transform: translateY(-10px);
+      }
+    }
+    
+    @keyframes shimmer {
+      0% {
+        background-position: -1000px 0;
+      }
+      100% {
+        background-position: 1000px 0;
+      }
+    }
+    
+    @keyframes numberCount {
+      from {
+        opacity: 0;
+        transform: scale(0.5);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+    
+    @keyframes textReveal {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+        clip-path: inset(0 0 100% 0);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+        clip-path: inset(0 0 0 0);
+      }
+    }
+    
+    .retrospective-card {
+      animation: fadeInScale 0.6s ease-out forwards;
+      opacity: 0;
+    }
+    
+    .retrospective-card:nth-child(odd) {
+      animation: slideInFromLeft 0.8s ease-out forwards;
+    }
+    
+    .retrospective-card:nth-child(even) {
+      animation: slideInFromRight 0.8s ease-out forwards;
+    }
+    
+    .retrospective-title {
+      animation: textReveal 1s ease-out forwards;
+      opacity: 0;
+    }
+    
+    .retrospective-month-card {
+      position: relative;
+      overflow: hidden;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .retrospective-month-card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(
+        45deg,
+        transparent,
+        rgba(59, 130, 246, 0.1),
+        transparent
+      );
+      animation: shimmer 3s infinite;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    
+    .retrospective-month-card:hover::before {
+      opacity: 1;
+    }
+    
+    .retrospective-month-card:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 20px 40px rgba(59, 130, 246, 0.3);
+    }
+    
+    .retrospective-poster {
+      animation: float 3s ease-in-out infinite;
+      transition: all 0.3s ease;
+    }
+    
+    .retrospective-poster:hover {
+      transform: scale(1.1) rotate(2deg);
+      box-shadow: 0 10px 30px rgba(59, 130, 246, 0.5);
+    }
+    
+    .retrospective-rating {
+      animation: numberCount 0.8s ease-out forwards;
+      opacity: 0;
+    }
+    
+    .retrospective-month-name {
+      background: linear-gradient(90deg, #60a5fa, #3b82f6, #2563eb);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: textReveal 0.8s ease-out forwards;
+      opacity: 0;
+    }
+    
+    .retrospective-badge {
+      animation: glow 2s ease-in-out infinite;
+    }
+    
+    .retrospective-stats {
+      animation: fadeInScale 0.6s ease-out 0.3s forwards;
+      opacity: 0;
+    }
+    
+    /* Botão de Retrospectiva com destaque */
+    .retrospective-btn {
+      background: linear-gradient(135deg, #3b82f6 0%, #06b6d4 50%, #3b82f6 100%);
+      background-size: 200% 200%;
+      animation: gradientShift 3s ease infinite;
+      box-shadow: 0 10px 30px rgba(59, 130, 246, 0.4), 0 0 20px rgba(59, 130, 246, 0.2);
+      border: 2px solid rgba(147, 197, 253, 0.5);
+    }
+    
+    .retrospective-btn:hover {
+      box-shadow: 0 15px 40px rgba(59, 130, 246, 0.6), 0 0 30px rgba(59, 130, 246, 0.4);
+      border-color: rgba(147, 197, 253, 0.8);
+    }
+    
+    .retrospective-btn-active {
+      background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
+      box-shadow: 0 10px 30px rgba(107, 114, 128, 0.4);
+      border: 2px solid rgba(156, 163, 175, 0.5);
+    }
+    
+    @keyframes gradientShift {
+      0%, 100% {
+        background-position: 0% 50%;
+      }
+      50% {
+        background-position: 100% 50%;
+      }
+    }
+    
+    .animate-shimmer {
+      animation: shimmer 2s linear infinite;
     }
   </style>
 
 </head>
-<body class="bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900 min-h-screen">
+<body class="min-h-screen theme-transition" :style="`background-image: ${getBackgroundGradient()}; background-color: #111827; --scrollbar-color: ${theme.scrollbar}; --scrollbar-hover: ${theme.scrollbarHover};`">
   <div id="app" class="min-h-screen py-8 px-4">
     <!-- Header -->
     <header class="text-center mb-12 animate-fadeInDown">
-      <h1 class="text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-red-500 to-pink-500 mb-2">
+      <h1 :class="`text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r ${getTitleGradient()} mb-2 theme-transition-fast`">
         <i class="fa-solid fa-film"></i> Cine Gabis & Erick
       </h1>
       <p class="text-gray-300 text-lg">Nossas aventuras cinematográficas</p>
@@ -132,13 +390,13 @@
     <div class="max-w-7xl mx-auto mb-12 animate-fadeInUp">
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         <!-- Total de Filmes -->
-        <div class="bg-gradient-to-br from-purple-600 to-blue-600 rounded-2xl p-6 shadow-2xl transform hover:scale-105 transition-all duration-300">
+        <div :class="`bg-gradient-to-br ${theme.primary} rounded-2xl p-6 shadow-2xl transform hover:scale-105 theme-transition-fast`">
           <div class="flex items-center justify-between">
             <div>
-              <p class="text-purple-200 text-sm font-medium mb-1">Total de Filmes</p>
-              <p class="text-white text-5xl font-bold">{{ animatedCount }}</p>
+              <p :class="`${selectedYear === '2025' ? 'text-blue-200' : 'text-orange-200'} text-sm font-medium mb-1`">Total de Filmes</p>
+              <p class="text-white text-5xl font-bold">{{ filteredMovies.length }}</p>
             </div>
-            <div class="bg-white bg-opacity-20 rounded-full p-4">
+            <div class="bg-black bg-opacity-30 rounded-full p-4">
               <i class="fa-solid fa-film text-white text-3xl"></i>
             </div>
           </div>
@@ -178,19 +436,63 @@
       </div>
     </div>
 
+    <!-- Year Tabs -->
+    <div class="max-w-7xl mx-auto mb-8 animate-scaleIn">
+      <div class="flex justify-center gap-4 mb-6">
+        <button 
+          @click="setYear('2025')"
+          :class="selectedYear === '2025' ? `bg-gradient-to-r ${theme.tabActive} shadow-2xl scale-105` : 'bg-gray-700 hover:bg-gray-600'"
+          class="text-white font-bold px-8 py-3 rounded-xl shadow-lg transform theme-transition-fast flex items-center gap-2">
+          <i class="fa-solid fa-calendar"></i>
+          2025
+          <span v-if="selectedYear === '2025'" class="ml-2 text-xs bg-black bg-opacity-40 px-2 py-1 rounded-full text-white">
+            {{ filteredMovies.length }}
+          </span>
+        </button>
+        
+        <button 
+          @click="setYear('2026')"
+          :class="selectedYear === '2026' ? `bg-gradient-to-r ${theme.tabActive} shadow-2xl scale-105` : 'bg-gray-700 hover:bg-gray-600'"
+          class="text-white font-bold px-8 py-3 rounded-xl shadow-lg transform theme-transition-fast flex items-center gap-2">
+          <i class="fa-solid fa-calendar"></i>
+          2026
+          <span v-if="selectedYear === '2026'" class="ml-2 text-xs bg-black bg-opacity-40 px-2 py-1 rounded-full text-white">
+            {{ filteredMovies.length }}
+          </span>
+        </button>
+      </div>
+    </div>
+
     <!-- Action Buttons -->
     <div class="max-w-7xl mx-auto mb-8 flex flex-wrap justify-center gap-4 animate-scaleIn">
       <button 
+        v-if="selectedYear === '2025'"
+        @click="toggleRetrospective"
+        :class="showRetrospective ? 'retrospective-btn-active' : 'retrospective-btn'"
+        class="relative overflow-hidden group">
+        <div class="absolute inset-0 bg-gradient-to-r from-blue-600 via-cyan-500 to-blue-600 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+        <div class="absolute inset-0 bg-gradient-to-r from-blue-400 via-cyan-400 to-blue-500 animate-shimmer bg-[length:200%_100%]"></div>
+        <div class="relative z-10 flex items-center gap-3 text-white font-bold px-8 py-4 rounded-2xl shadow-2xl transform hover:scale-110 transition-all duration-300">
+          <i :class="showRetrospective ? 'fa-solid fa-times-circle text-xl' : 'fa-solid fa-trophy text-xl animate-pulse'"></i>
+          <span class="text-lg">{{ showRetrospective ? 'Fechar Retrospectiva' : 'Retrospectiva 2025' }}</span>
+          <i v-if="!showRetrospective" class="fa-solid fa-sparkles text-yellow-300 text-sm animate-pulse"></i>
+        </div>
+      </button>
+      
+      <button 
         @click="toggleSortOrder"
-        class="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-semibold px-6 py-3 rounded-xl shadow-lg transform hover:scale-105 transition-all duration-300 flex items-center gap-2">
+        :class="`bg-gradient-to-r ${theme.secondary} text-white font-semibold px-6 py-3 rounded-xl shadow-lg btn-theme-secondary flex items-center gap-2`"
+        :style="selectedYear === '2025' ? '--hover-from: rgb(79, 70, 229); --hover-to: rgb(37, 99, 235);' : '--hover-from: rgb(220, 38, 38); --hover-to: rgb(219, 39, 119);'"
+        @mouseenter="e => { const btn = e.target.closest('button'); if (btn) btn.style.background = `linear-gradient(to right, var(--hover-from), var(--hover-to))`; }"
+        @mouseleave="e => { const btn = e.target.closest('button'); if (btn) btn.style.background = ''; }">
         <i :class="sortOrder === 'desc' ? 'fa-solid fa-arrow-down-wide-short' : 'fa-solid fa-arrow-up-wide-short'"></i>
         {{ sortOrder === 'desc' ? 'Melhor → Pior' : 'Pior → Melhor' }}
       </button>
       
       <button 
         @click="toggleAddForm"
-        :class="showAddForm ? 'bg-gradient-to-r from-gray-600 to-gray-700' : 'bg-gradient-to-r from-pink-600 to-red-600'"
-        class="hover:shadow-xl text-white font-semibold px-6 py-3 rounded-xl shadow-lg transform hover:scale-105 transition-all duration-300 flex items-center gap-2">
+        :class="showAddForm ? 'bg-gradient-to-r from-gray-600 to-gray-700' : `bg-gradient-to-r ${theme.buttonSecondary}`"
+        class="hover:shadow-xl text-white font-semibold px-6 py-3 rounded-xl shadow-lg transform hover:scale-105 theme-transition-fast flex items-center gap-2">
         <i :class="showAddForm ? 'fa-solid fa-times' : 'fa-solid fa-plus'"></i>
         {{ showAddForm ? 'Cancelar' : 'Adicionar Filme' }}
       </button>
@@ -198,7 +500,10 @@
       <button 
         @click="loadMovies" 
         :disabled="loading"
-        class="bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-semibold px-6 py-3 rounded-xl shadow-lg transform hover:scale-105 transition-all duration-300 flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none">
+        :class="`bg-gradient-to-r ${theme.buttonPrimary} text-white font-semibold px-6 py-3 rounded-xl shadow-lg btn-theme-primary flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none`"
+        :style="selectedYear === '2025' ? '--hover-from: rgb(37, 99, 235); --hover-to: rgb(8, 145, 178);' : '--hover-from: rgb(234, 88, 12); --hover-to: rgb(220, 38, 38);'"
+        @mouseenter="e => { if (!loading) { const btn = e.target.closest('button'); if (btn) btn.style.background = `linear-gradient(to right, var(--hover-from), var(--hover-to))`; } }"
+        @mouseleave="e => { const btn = e.target.closest('button'); if (btn) btn.style.background = ''; }">
         <i class="fa-solid fa-rotate" :class="loading ? 'fa-spin' : ''"></i>
         {{ loading ? 'Carregando...' : 'Recarregar' }}
       </button>
@@ -216,7 +521,7 @@
 
     <!-- Add Movie Form -->
     <div v-if="showAddForm" class="max-w-4xl mx-auto mb-12 animate-scaleIn">
-      <div class="bg-gray-800 bg-opacity-50 backdrop-blur-lg rounded-2xl shadow-2xl p-8 border border-gray-700">
+      <div class="bg-gray-900 bg-opacity-80 backdrop-blur-lg rounded-2xl shadow-2xl p-8 border border-gray-800">
         <h2 class="text-3xl font-bold text-white mb-6 flex items-center gap-3">
           <i class="fa-solid fa-plus-circle text-pink-500"></i>
           Adicionar Novo Filme
@@ -236,16 +541,16 @@
                   @input="searchMovies(newMovie.movieName)"
                   @focus="newMovie.movieName && searchMovies(newMovie.movieName)"
                   required
-                  class="w-full bg-gray-700 text-white border border-gray-600 rounded-lg px-4 py-3 pr-10 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+                  :class="`w-full bg-gray-700 text-white border border-gray-600 rounded-lg px-4 py-3 pr-10 focus:outline-none focus:ring-2 ${getFocusRingClass()} focus:border-transparent transition-all`"
                   placeholder="Digite o nome do filme...">
-                <i v-if="searchLoading" class="fa-solid fa-spinner fa-spin absolute right-3 top-1/2 transform -translate-y-1/2 text-purple-400"></i>
+                <i v-if="searchLoading" :class="`fa-solid fa-spinner fa-spin absolute right-3 top-1/2 transform -translate-y-1/2 ${selectedYear === '2025' ? 'text-blue-400' : 'text-orange-400'}`"></i>
                 <i v-else class="fa-solid fa-search absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
               </div>
               
               <!-- Dropdown de Resultados -->
               <div 
                 v-if="showSearchResults && searchResults.length > 0" 
-                class="absolute z-50 w-full mt-2 bg-gray-800 border border-gray-600 rounded-lg shadow-2xl max-h-96 overflow-y-auto animate-scaleIn">
+                class="absolute z-50 w-full mt-2 bg-gray-900 border border-gray-700 rounded-lg shadow-2xl max-h-96 overflow-y-auto animate-scaleIn">
                 <div 
                   v-for="movie in searchResults" 
                   :key="movie.id"
@@ -276,7 +581,7 @@
               <!-- Mensagem quando não há resultados -->
               <div 
                 v-if="showSearchResults && searchResults.length === 0 && !searchLoading && newMovie.movieName.length >= 2"
-                class="absolute z-50 w-full mt-2 bg-gray-800 border border-gray-600 rounded-lg shadow-2xl p-4 text-center">
+                class="absolute z-50 w-full mt-2 bg-gray-900 border border-gray-700 rounded-lg shadow-2xl p-4 text-center">
                 <i class="fa-solid fa-search text-gray-500 text-2xl mb-2"></i>
                 <p class="text-gray-400">Nenhum filme encontrado</p>
                 <p class="text-gray-500 text-sm mt-1">Tente outro nome</p>
@@ -294,7 +599,7 @@
                 v-model="newMovie.movieImg" 
                 @input="previewImage"
                 required
-                class="w-full bg-gray-700 text-white border border-gray-600 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                :class="`w-full bg-gray-700 text-white border border-gray-600 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 ${getFocusRingClass()} focus:border-transparent transition-all`"
                 placeholder="https://... (ou selecione um filme da busca)">
               
               <!-- Image Preview -->
@@ -304,7 +609,7 @@
                   @error="imageError = true"
                   @load="imageError = false"
                   v-show="!imageError"
-                  class="preview-image rounded-lg shadow-lg max-h-64 object-cover border-4 border-purple-500"
+                  :class="`preview-image rounded-lg shadow-lg max-h-64 object-cover border-4 ${selectedYear === '2025' ? 'border-blue-500' : 'border-orange-500'}`"
                   alt="Preview">
                 <div v-show="imageError" class="bg-gray-700 rounded-lg p-8 text-center">
                   <i class="fa-solid fa-image-slash text-gray-500 text-4xl mb-2"></i>
@@ -362,7 +667,10 @@
           <button 
             type="submit" 
             :disabled="loading"
-            class="w-full bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-700 hover:to-purple-700 text-white font-bold py-4 rounded-xl shadow-lg transform hover:scale-105 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-3">
+            :class="`w-full bg-gradient-to-r ${theme.buttonPrimary} text-white font-bold py-4 rounded-xl shadow-lg btn-theme-primary disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-3`"
+            :style="selectedYear === '2025' ? '--hover-from: rgb(37, 99, 235); --hover-to: rgb(8, 145, 178);' : '--hover-from: rgb(234, 88, 12); --hover-to: rgb(220, 38, 38);'"
+            @mouseenter="e => { if (!loading) { const btn = e.target.closest('button'); if (btn) btn.style.background = `linear-gradient(to right, var(--hover-from), var(--hover-to))`; } }"
+            @mouseleave="e => { const btn = e.target.closest('button'); if (btn) btn.style.background = ''; }">
             <i class="fa-solid fa-save text-xl"></i>
             <span class="text-lg">{{ loading ? 'Salvando...' : 'Salvar Filme' }}</span>
           </button>
@@ -370,13 +678,139 @@
       </div>
     </div>
 
+    <!-- Retrospectiva 2025 -->
+    <div v-if="showRetrospective && selectedYear === '2025'" class="max-w-7xl mx-auto mb-12">
+      <div class="bg-gradient-to-br from-gray-900 via-blue-900/30 to-gray-900 bg-opacity-95 backdrop-blur-xl rounded-3xl shadow-2xl p-8 md:p-12 border border-blue-500/30 relative overflow-hidden">
+        <!-- Efeito de brilho de fundo -->
+        <div class="absolute inset-0 bg-gradient-to-r from-blue-600/10 via-transparent to-blue-600/10 animate-pulse"></div>
+        
+        <!-- Título com animação -->
+        <div class="relative z-10">
+          <h2 class="retrospective-title text-5xl md:text-6xl font-extrabold text-white mb-4 flex items-center gap-4">
+            <i class="fa-solid fa-calendar-star text-blue-400 animate-pulse"></i>
+            <span class="bg-gradient-to-r from-blue-400 via-cyan-400 to-blue-500 bg-clip-text text-transparent">
+              Retrospectiva 2025
+            </span>
+          </h2>
+          <p class="retrospective-title text-xl text-gray-300 mb-8" style="animation-delay: 0.2s; opacity: 0;">
+            Seus filmes favoritos de cada mês
+          </p>
+        </div>
+        
+        <div v-if="monthlyBestMovies.length === 0" class="text-center py-12 relative z-10">
+          <i class="fa-solid fa-calendar-xmark text-gray-600 text-6xl mb-4 animate-pulse"></i>
+          <p class="text-gray-400 text-xl">Nenhum filme encontrado para a retrospectiva</p>
+        </div>
+        
+        <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 relative z-10">
+          <div 
+            v-for="(item, index) in monthlyBestMovies" 
+            :key="`month-${item.month}`"
+            class="retrospective-month-card bg-gradient-to-br from-gray-800/90 to-gray-900/90 rounded-2xl p-6 border border-blue-500/30 backdrop-blur-sm relative overflow-hidden"
+            :style="{ animationDelay: `${index * 0.15}s` }">
+            
+            <!-- Efeito de brilho no hover -->
+            <div class="absolute inset-0 bg-gradient-to-br from-blue-500/0 to-blue-500/0 hover:from-blue-500/10 hover:to-transparent transition-all duration-500 rounded-2xl"></div>
+            
+            <!-- Header do Mês -->
+            <div class="relative z-10 flex items-center justify-between mb-5 pb-4 border-b border-blue-500/30">
+              <h3 class="retrospective-month-name text-2xl font-bold flex items-center gap-3">
+                <i class="fa-solid fa-calendar-days text-blue-400" style="animation: float 3s ease-in-out infinite;"></i>
+                {{ item.monthName }}
+              </h3>
+              <div class="retrospective-badge bg-gradient-to-r from-blue-600 to-cyan-600 rounded-full px-4 py-2 shadow-lg">
+                <span class="retrospective-rating text-yellow-300 font-bold text-sm flex items-center gap-1">
+                  <span>{{ item.average.toFixed(1) }}</span>
+                  <i class="fa-solid fa-star text-yellow-300 text-xs"></i>
+                </span>
+              </div>
+            </div>
+            
+            <!-- Filme do Mês -->
+            <div class="relative z-10 flex items-start gap-4">
+              <div class="relative">
+                <img 
+                  :src="item.movie.movieImg" 
+                  :alt="item.movie.movieName"
+                  class="retrospective-poster w-24 h-32 object-cover rounded-xl shadow-2xl border-2 border-blue-400/50">
+                <div class="absolute inset-0 bg-gradient-to-t from-blue-600/20 to-transparent rounded-xl"></div>
+              </div>
+              
+              <div class="flex-1 min-w-0">
+                <h4 class="text-white font-bold text-lg mb-3 line-clamp-2 hover:text-blue-300 transition-colors">
+                  {{ item.movie.movieName }}
+                </h4>
+                
+                <div class="flex items-center gap-2 text-gray-400 text-sm mb-4">
+                  <i class="fa-solid fa-calendar text-blue-400"></i>
+                  <span>{{ formatDate(item.movie.date) }}</span>
+                </div>
+                
+                <!-- Ratings com animação -->
+                <div class="retrospective-stats space-y-2">
+                  <div class="flex items-center justify-between bg-blue-500/10 rounded-lg p-2 border border-blue-500/20">
+                    <span class="text-blue-300 text-xs font-semibold flex items-center gap-1">
+                      <i class="fa-solid fa-user text-blue-400"></i>
+                      Erick
+                    </span>
+                    <div class="flex items-center gap-2">
+                      <span class="text-yellow-400 text-sm" v-html="getStars(item.movie.erickRating)"></span>
+                      <span class="text-white text-xs font-bold bg-blue-500/20 px-2 py-1 rounded">{{ item.movie.erickRating.toFixed(1) }}</span>
+                    </div>
+                  </div>
+                  
+                  <div class="flex items-center justify-between bg-pink-500/10 rounded-lg p-2 border border-pink-500/20">
+                    <span class="text-pink-300 text-xs font-semibold flex items-center gap-1">
+                      <i class="fa-solid fa-user text-pink-400"></i>
+                      Gabi
+                    </span>
+                    <div class="flex items-center gap-2">
+                      <span class="text-yellow-400 text-sm" v-html="getStars(item.movie.gabiRating)"></span>
+                      <span class="text-white text-xs font-bold bg-pink-500/20 px-2 py-1 rounded">{{ item.movie.gabiRating.toFixed(1) }}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Badge de destaque -->
+            <div class="absolute top-2 right-2 bg-gradient-to-r from-yellow-400 to-orange-400 text-gray-900 text-xs font-bold px-2 py-1 rounded-full opacity-0 hover:opacity-100 transition-opacity">
+              <i class="fa-solid fa-trophy"></i> Filme do Mês
+            </div>
+          </div>
+        </div>
+        
+        <!-- Estatísticas no final -->
+        <div v-if="monthlyBestMovies.length > 0" class="mt-12 pt-8 border-t border-blue-500/30 relative z-10">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="text-center retrospective-stats" style="animation-delay: 0.5s;">
+              <div class="text-4xl font-bold text-blue-400 mb-2">{{ monthlyBestMovies.length }}</div>
+              <div class="text-gray-400 text-sm">Meses com Filmes</div>
+            </div>
+            <div class="text-center retrospective-stats" style="animation-delay: 0.6s;">
+              <div class="text-4xl font-bold text-yellow-400 mb-2">
+                {{ (monthlyBestMovies.reduce((sum, item) => sum + item.average, 0) / monthlyBestMovies.length).toFixed(1) }}
+              </div>
+              <div class="text-gray-400 text-sm">Média Geral</div>
+            </div>
+            <div class="text-center retrospective-stats" style="animation-delay: 0.7s;">
+              <div class="text-4xl font-bold text-cyan-400 mb-2">
+                {{ monthlyBestMovies.reduce((max, item) => item.average > max ? item.average : max, 0).toFixed(1) }}
+              </div>
+              <div class="text-gray-400 text-sm">Melhor Média</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Movies Grid -->
-    <div class="max-w-7xl mx-auto">
+    <div v-if="!showRetrospective || selectedYear !== '2025'" class="max-w-7xl mx-auto">
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         <div 
-          v-for="(movie, index) in movies" 
+          v-for="(movie, index) in sortedMovies" 
           :key="movie.id || movie.movieName" 
-          class="movie-card bg-gray-800 bg-opacity-50 backdrop-blur-sm rounded-2xl overflow-hidden shadow-xl border border-gray-700 hover:border-purple-500 hover:shadow-2xl hover:shadow-purple-500/50 animate-fadeInUp"
+          :class="`movie-card bg-gray-900 bg-opacity-70 backdrop-blur-sm rounded-2xl overflow-hidden shadow-xl border border-gray-800 hover:${theme.cardBorder} hover:shadow-2xl hover:${theme.cardShadow} animate-fadeInUp theme-transition-fast`"
           :style="{ animationDelay: `${index * 0.05}s` }">
           
           <!-- Movie Poster -->
@@ -425,13 +859,13 @@
       </div>
 
       <!-- Empty State -->
-      <div v-if="!loading && movies.length === 0" class="text-center py-20">
+      <div v-if="!loading && filteredMovies.length === 0" class="text-center py-20">
         <i class="fa-solid fa-film text-gray-600 text-6xl mb-4"></i>
-        <p class="text-gray-400 text-xl">Nenhum filme encontrado</p>
+        <p class="text-gray-400 text-xl">Nenhum filme encontrado para {{ selectedYear }}</p>
       </div>
 
       <!-- Loading State -->
-      <div v-if="loading && movies.length === 0" class="text-center py-20">
+      <div v-if="loading && filteredMovies.length === 0" class="text-center py-20">
         <i class="fa-solid fa-spinner fa-spin text-purple-500 text-6xl mb-4"></i>
         <p class="text-gray-400 text-xl">Carregando filmes...</p>
       </div>

@@ -7,6 +7,8 @@ createApp({
       animatedCount: 0,
       sortOrder: 'desc', // 'desc' = melhor→pior, 'asc' = pior→melhor
       showAddForm: false,
+      showRetrospective: false,
+      selectedYear: '2026', // Ano padrão selecionado
       newMovie: {
         movieName: '',
         movieImg: '',
@@ -30,10 +32,11 @@ createApp({
         const res = await fetch("https://9daharmgyf.execute-api.us-east-2.amazonaws.com/prod/movies");
         const data = await res.json();
         this.movies = data.movies || [];
-        this.sortMovies();
 
-        // animação da contagem
-        this.animateCount(0, this.movies.length, 1000); // 1000ms = 1s
+        // animação da contagem baseada nos filmes filtrados
+        this.$nextTick(() => {
+          this.animateCount(0, this.filteredMovies.length, 1000); // 1000ms = 1s
+        });
         this.loading = false;
       } catch (err) {
         console.error("Erro ao carregar filmes da API:", err);
@@ -164,15 +167,47 @@ createApp({
     },
     toggleSortOrder() {
         this.sortOrder = this.sortOrder === 'desc' ? 'asc' : 'desc';
-        this.sortMovies();
       },
-      sortMovies() {
-        if (this.sortOrder === 'desc') {
-          // do melhor para o pior
-          this.movies.sort((a, b) => this.getAverage(b) - this.getAverage(a));
+      setYear(year) {
+        this.selectedYear = year;
+        this.showRetrospective = false; // Fecha retrospectiva ao mudar de ano
+        // Atualiza a contagem animada quando mudar de ano
+        this.$nextTick(() => {
+          this.animateCount(0, this.filteredMovies.length, 1000);
+        });
+      },
+      toggleRetrospective() {
+        this.showRetrospective = !this.showRetrospective;
+      },
+      getMonthName(monthIndex) {
+        const months = [
+          'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
+          'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
+        ];
+        return months[monthIndex] || '';
+      },
+      getFocusRingClass() {
+        // Retorna a classe de focus ring baseada no tema
+        if (this.selectedYear === '2025') {
+          return 'focus:ring-blue-500';
         } else {
-          // do pior para o melhor
-          this.movies.sort((a, b) => this.getAverage(a) - this.getAverage(b));
+          return 'focus:ring-orange-500';
+        }
+      },
+      getTitleGradient() {
+        // Retorna o gradiente do título baseado no tema
+        if (this.selectedYear === '2025') {
+          return 'from-cyan-400 via-blue-500 to-indigo-500';
+        } else {
+          return 'from-yellow-400 via-orange-500 to-red-500';
+        }
+      },
+      getBackgroundGradient() {
+        // Retorna o gradiente do background como CSS inline
+        if (this.selectedYear === '2025') {
+          return 'linear-gradient(to bottom right, #111827, #1e3a8a, #111827)';
+        } else {
+          return 'linear-gradient(to bottom right, #111827, #9a3412, #111827)';
         }
       },
     animateCount(start, end, duration) {
@@ -229,21 +264,128 @@ createApp({
     }
   },
   computed: {
+    theme() {
+      // Tema 2025: Azul/Ciano (cores frias, futuristas)
+      // Tema 2026: Laranja/Vermelho (cores quentes, vibrantes)
+      if (this.selectedYear === '2025') {
+        return {
+          primary: 'from-blue-600 to-cyan-600',
+          primaryHover: 'from-blue-700 to-cyan-700',
+          secondary: 'from-indigo-600 to-blue-600',
+          secondaryHover: 'from-indigo-700 to-blue-700',
+          accent: 'from-cyan-500 to-blue-500',
+          accentHover: 'from-cyan-600 to-blue-600',
+          background: 'from-gray-900 via-blue-900 to-gray-900',
+          cardBorder: 'border-blue-500',
+          cardShadow: 'shadow-blue-500/50',
+          buttonPrimary: 'from-blue-600 to-cyan-600',
+          buttonPrimaryHover: 'from-blue-700 to-cyan-700',
+          buttonSecondary: 'from-indigo-600 to-blue-600',
+          buttonSecondaryHover: 'from-indigo-700 to-blue-700',
+          tabActive: 'from-blue-600 to-cyan-600',
+          scrollbar: 'rgba(59, 130, 246, 0.5)',
+          scrollbarHover: 'rgba(59, 130, 246, 0.8)'
+        };
+      } else {
+        return {
+          primary: 'from-orange-600 to-red-600',
+          primaryHover: 'from-orange-700 to-red-700',
+          secondary: 'from-red-600 to-pink-600',
+          secondaryHover: 'from-red-700 to-pink-700',
+          accent: 'from-orange-500 to-red-500',
+          accentHover: 'from-orange-600 to-red-600',
+          background: 'from-gray-900 via-orange-900 to-gray-900',
+          cardBorder: 'border-orange-500',
+          cardShadow: 'shadow-orange-500/50',
+          buttonPrimary: 'from-orange-600 to-red-600',
+          buttonPrimaryHover: 'from-orange-700 to-red-700',
+          buttonSecondary: 'from-red-600 to-pink-600',
+          buttonSecondaryHover: 'from-red-700 to-pink-700',
+          tabActive: 'from-orange-600 to-red-600',
+          scrollbar: 'rgba(251, 146, 60, 0.5)',
+          scrollbarHover: 'rgba(251, 146, 60, 0.8)'
+        };
+      }
+    },
+    filteredMovies() {
+      if (!this.movies.length) return [];
+      return this.movies.filter(movie => {
+        if (!movie.date) return false;
+        const year = new Date(movie.date).getFullYear();
+        return year.toString() === this.selectedYear;
+      });
+    },
+    sortedMovies() {
+      const movies = [...this.filteredMovies];
+      if (this.sortOrder === 'desc') {
+        return movies.sort((a, b) => this.getAverage(b) - this.getAverage(a));
+      } else {
+        return movies.sort((a, b) => this.getAverage(a) - this.getAverage(b));
+      }
+    },
     bestMovie() {
-      if (!this.movies.length) return null;
-      return this.movies.reduce((max, movie) => this.getAverage(movie) > this.getAverage(max) ? movie : max, this.movies[0]);
+      if (!this.filteredMovies.length) return null;
+      return this.filteredMovies.reduce((max, movie) => this.getAverage(movie) > this.getAverage(max) ? movie : max, this.filteredMovies[0]);
     },
     worstMovie() {
-      if (!this.movies.length) return null;
-      return this.movies.reduce((min, movie) => this.getAverage(movie) < this.getAverage(min) ? movie : min, this.movies[0]);
+      if (!this.filteredMovies.length) return null;
+      return this.filteredMovies.reduce((min, movie) => this.getAverage(movie) < this.getAverage(min) ? movie : min, this.filteredMovies[0]);
     },
     gabiAverage() {
-      if (!this.movies.length) return 0;
-      return (this.movies.reduce((sum, m) => sum + m.gabiRating, 0) / this.movies.length).toFixed(1);
+      if (!this.filteredMovies.length) return 0;
+      return (this.filteredMovies.reduce((sum, m) => sum + m.gabiRating, 0) / this.filteredMovies.length).toFixed(1);
     },
     erickAverage() {
-      if (!this.movies.length) return 0;
-      return (this.movies.reduce((sum, m) => sum + m.erickRating, 0) / this.movies.length).toFixed(1);
+      if (!this.filteredMovies.length) return 0;
+      return (this.filteredMovies.reduce((sum, m) => sum + m.erickRating, 0) / this.filteredMovies.length).toFixed(1);
+    },
+    monthlyBestMovies() {
+      // Agrupa filmes por mês e encontra o melhor de cada mês
+      if (!this.filteredMovies.length || this.selectedYear !== '2025') return [];
+      
+      const moviesByMonth = {};
+      
+      // Agrupa filmes por mês
+      this.filteredMovies.forEach(movie => {
+        if (!movie.date) return;
+        const date = new Date(movie.date);
+        const month = date.getMonth(); // 0-11
+        const monthKey = month;
+        
+        if (!moviesByMonth[monthKey]) {
+          moviesByMonth[monthKey] = [];
+        }
+        moviesByMonth[monthKey].push(movie);
+      });
+      
+      // Encontra o melhor filme de cada mês (baseado na média)
+      const bestMovies = [];
+      for (let month = 0; month < 12; month++) {
+        if (moviesByMonth[month] && moviesByMonth[month].length > 0) {
+          const bestMovie = moviesByMonth[month].reduce((best, current) => {
+            return this.getAverage(current) > this.getAverage(best) ? current : best;
+          });
+          bestMovies.push({
+            month: month,
+            monthName: this.getMonthName(month),
+            movie: bestMovie,
+            average: this.getAverage(bestMovie)
+          });
+        }
+      }
+      
+      return bestMovies;
+    }
+  },
+  watch: {
+    filteredMovies: {
+      handler() {
+        // Atualiza a contagem quando os filmes filtrados mudarem
+        this.$nextTick(() => {
+          this.animateCount(0, this.filteredMovies.length, 1000);
+        });
+      },
+      immediate: false
     }
   },
   mounted() {
